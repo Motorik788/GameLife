@@ -3,26 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-<<<<<<< HEAD
 using Core;
 
 namespace LifeTest
 {
-   public abstract class View
-    {
-        [System.Serializable]
-        public class ConsolePresenter : IPresenter
-        {          
-=======
-
-namespace LifeTest
-{
-    abstract class View
+    public abstract class View
     {
         [System.Serializable]
         public class ConsolePresenter : IPresenter
         {
->>>>>>> remotes/origin/master
             public ConsolePresenter()
             {
                 Task.Factory.StartNew
@@ -31,11 +20,7 @@ namespace LifeTest
                        {
                            while (true)
                            {
-<<<<<<< HEAD
                                if (Input.GetKey() == ConsoleKey.S)
-=======
-                               if (Program.Input.GetKey() == ConsoleKey.S)
->>>>>>> remotes/origin/master
                                {
                                    GameManager.Stop();
                                    break;
@@ -53,13 +38,8 @@ namespace LifeTest
                 {
                     for (int j = 0; j < field.YLenght; j++)
                     {
-<<<<<<< HEAD
-                        if (field.Cells[i ][j])
-                            Console.Write("{0}|", field.Cells[i ][j].Icon);
-=======
-                        if (field.Cells[i, j])
-                            Console.Write("{0}|", field.Cells[i, j].Icon);
->>>>>>> remotes/origin/master
+                        if (field.Cells[i][j])
+                            Console.Write("{0}|", field.Cells[i][j].Icon);
                         else
                             Console.Write(" |");
                     }
@@ -81,16 +61,5 @@ namespace LifeTest
                 Console.WriteLine("Поколение {0}, Травы {1}", field.Generation, field.GameObjects.Count);
             }
         }
-<<<<<<< HEAD
-=======
-
-        public class WinPresenter : IPresenter
-        {
-            public void Present(Field field)
-            {
-                throw new NotImplementedException();
-            }
-        }
->>>>>>> remotes/origin/master
     }
 }
