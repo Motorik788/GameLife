@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using Core;
 using System.Xml.Serialization;
 
@@ -52,12 +51,9 @@ namespace LifeTest
         {
             Game = false;
         }
-
        
-
         public static void Save()
         {
-
             // DataContractJsonSerializer d = new DataContractJsonSerializer(typeof(Field));
             XmlSerializer s = new XmlSerializer(typeof(Field));
             var f_ = new MemoryStream();
@@ -72,25 +68,20 @@ namespace LifeTest
                 db.SaveChanges();              
                 f_.Close();
             }
+            Settings.Save();
 
-            //конфиги думаю в xml запихать
-         
         }
 
         public static Field Load()
         {
+            Settings.Load();
             using (var db = new Model1())
             {
                 var serializer =  new XmlSerializer(typeof(Field));
                 var b = new MemoryStream(Encoding.UTF8.GetBytes(db.MyEntities.Find(1).Name));
                 var field = serializer.Deserialize(b) as Field;              
                 return field;
-            }
-            //var ser = new BinaryFormatter();
-            //var f = File.Open(Environment.CurrentDirectory + "/sav.md", FileMode.Open);
-            //var field = ser.Deserialize(f) as Field;
-            //f.Close();
-            
+            }                        
         }
     }
 }

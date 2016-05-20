@@ -20,8 +20,6 @@ namespace LifeTest
             Settings
         }
 
-
-
         static States state = States.Main;
 
         static void StartMenu(IPresenter presenter = null, Field field = null)
@@ -111,8 +109,7 @@ namespace LifeTest
 
         static void Main(string[] args)
         {
-            Menu();
-
+             Menu();          
         }
     }
 }
