@@ -7,25 +7,31 @@ using System.Threading;
 using System.Xml.Serialization;
 using System.Xml;
 using System.Xml.Schema;
+using System.Runtime.Serialization;
 
-namespace LifeTest
+namespace Core
 {
     // [System.Serializable]
+    [DataContract]
     [XmlRoot]
     public class Field
     {
+        [DataMember]
         [XmlArray]
         public ContentBase[][] Cells;
+        [DataMember]
         [XmlArray]
         public List<ContentBase> GameObjects = new List<ContentBase>();
+        [DataMember]
         [XmlElement]
         public int XLenght;
+        [DataMember]
         [XmlElement]
         public int YLenght;
+        [DataMember]
         [XmlElement]
         public int Generation { get; set; }
 
-        private IPresenter presenter { get; set; }
         public Field() { }
 
         public Field(int x, int y)
@@ -39,37 +45,19 @@ namespace LifeTest
             YLenght = y;
         }
 
-        public void SetPresenter(IPresenter newPresenter)
-        {
-            presenter = newPresenter;
-        }
-
-
         public void Iteration()
         {
-            while (GameManager.Game)
+            var game = GameManager.Games.Find(x => x.CurrentField == this);
+            while (game.IsGame)
             {
                 Thread.Sleep(100);
                 Generation++;
                 for (int i = 0; i < GameObjects.Count; i++)
                 {
-                    GameObjects[i].Behavior.Do(this);
+                    GameObjects[i].Behavior.Do(game);
                 }
-                Update();
             }
         }
-
-        private void Update()
-        {
-            presenter.Present(this);
-            //foreach (var item in GameObjects)
-            //{
-            //    Console.CursorLeft = item.PosY+1;
-            //    Console.CursorTop = item.PosX+2;
-            //    Console.Write(item.Icon);
-            //}
-        }
-
 
         public void AddCell(ContentBase content)
         {
@@ -83,7 +71,5 @@ namespace LifeTest
             }
 
         }
-
-
     }
 }

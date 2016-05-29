@@ -6,23 +6,31 @@ using System.Threading.Tasks;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
-namespace LifeTest
+namespace Core
 {
 
-    [XmlInclude(typeof(Grass))]
-    [XmlInclude(typeof(Grass_2))]
+     [XmlInclude(typeof(Grass))]
+     [XmlInclude(typeof(Grass_2))]
     [XmlInclude(typeof(Herbivorous_1))]
-    public class ContentBase
+    [DataContract]
+    [KnownType(typeof(Grass))]
+    [KnownType(typeof(Grass_2))]
+    [KnownType(typeof(Herbivorous_1))]
+    public abstract class ContentBase
     {
+        [DataMember]
         public int PosX;
+        [DataMember]
         public int PosY;
+        [DataMember]
         public char Icon { get; set; }
 
         public ContentBase()
         {
 
         }
-        [XmlElement]
+        // [DataMember]
+        //[XmlElement]
         public virtual IBehavior Behavior { get; }
 
         public ContentBase(int x, int y, char ico)

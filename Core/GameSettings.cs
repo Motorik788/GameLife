@@ -6,12 +6,16 @@ using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using System.IO;
 using System.Xml.Serialization;
+using System.Runtime.Serialization;
 
-namespace LifeTest
+namespace Core
 {
+    [DataContract]
     public struct Pair<TKey, TValue>
     {
+        [DataMember]
         public TKey Key { get; set; }
+        [DataMember]
         public TValue Value { get; set; }
 
         public Pair(TKey key, TValue value)
@@ -22,12 +26,15 @@ namespace LifeTest
     }
 
     [XmlRoot]
+    [DataContract]
     public class GameSettings
     {
-
+        [DataMember]
         public Pair<int, int>[] StartPreset { get; set; }
+        [DataMember]
         [XmlElement]
         public Pair<int, int> Size { get; set; }
+        [DataMember]
         [XmlElement]
         public int MaxCloseCells { get; set; }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
-namespace LifeTest
+namespace Core
 {
     public class Grass : ContentBase, IBehavior
     {
@@ -24,15 +24,11 @@ namespace LifeTest
             }          
         }
 
-        public void Die()
-        {
-            GameManager.DeleteCell(PosX, PosY);
+      
 
-        }
-
-        public bool Do(Field field)
+        public bool Do(Game field)
         {
-            int max = GameManager.Settings.MaxCloseCells;
+            int max = field.Settings.MaxCloseCells;
             int cells = 0;
             List<KeyValuePair<int, int>> points = new List<KeyValuePair<int, int>>();
             for (int i = PosY - 1; i <= PosY + 1; i++)
@@ -41,9 +37,9 @@ namespace LifeTest
                 {
                     if (cells < max)
                     {
-                        if (j > -1 && j < field.XLenght && i > -1 && i < field.YLenght)
+                        if (j > -1 && j < field.CurrentField.XLenght && i > -1 && i < field.CurrentField.YLenght)
                         {
-                            if (field.Cells[j ][i])
+                            if (field.CurrentField.Cells[j ][i])
                             {
                                 cells++;
 
@@ -58,7 +54,7 @@ namespace LifeTest
                     }
                     else
                     {
-                        Die();
+                        Die(field);
                         return true;
                     }
                 }
@@ -68,10 +64,15 @@ namespace LifeTest
             {
                 var r = new Random();
                 var p = points[r.Next(0, points.Count)];
-                field.AddCell(new Grass(p.Key, p.Value));
+                field.CurrentField.AddCell(new Grass(p.Key, p.Value));
                 return true;
             }
             return false;
+        }
+
+        public void Die(Game game)
+        {
+            game.DeleteCell(PosX, PosY);
         }
     }
 }

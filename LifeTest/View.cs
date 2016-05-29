@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Core;
 
-namespace LifeTest
+namespace Core
 {
     public abstract class View
     {
@@ -21,8 +21,8 @@ namespace LifeTest
                            while (true)
                            {
                                if (Input.GetKey() == ConsoleKey.S)
-                               {
-                                   GameManager.Stop();
+                               {                                  
+                                   Program.chanell.StopGame(Program.currentGame);
                                    break;
                                }
                            }

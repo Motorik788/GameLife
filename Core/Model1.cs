@@ -3,18 +3,20 @@
     using System;
     using System.Data.Entity;
     using System.Linq;
-    using LifeTest;
+    using Core;
 
-    public class S
+    public class Save
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Field { get; set; }
+        public string Setting { get; set; }
 
-        public S(string s)
+        public Save(string field,string setting)
         {
-            Name = s;
+            Field = field;
+            Setting = setting;
         }
-        public S() { }
+        public Save() { }
     }
 
     public class Model1 : DbContext
@@ -30,7 +32,7 @@
         {
         }
 
-        public virtual DbSet<S> MyEntities { get; set; }
+        public virtual DbSet<Save> MyEntities { get; set; }
         // Добавьте DbSet для каждого типа сущности, который требуется включить в модель. Дополнительные сведения 
         // о настройке и использовании модели Code First см. в статье http://go.microsoft.com/fwlink/?LinkId=390109.
 

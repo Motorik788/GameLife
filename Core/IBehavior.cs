@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LifeTest
+namespace Core
 {
     public interface IBehavior
     {
-        bool Do(Field field);
-        void Die();
+        bool Do(Game Game_field);
+        void Die(Game game);
     }
 }

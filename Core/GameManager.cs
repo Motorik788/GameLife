@@ -7,81 +7,95 @@ using System.IO;
 using Core;
 using System.Xml.Serialization;
 
-namespace LifeTest
+
+namespace Core
 {
     public static class GameManager
     {
-        public static Field CurrentField { get; private set; }
-        public static bool Game;
-        public static GameSettings Settings { get; set; }
+        public static List<Game> Games = new List<Game>();
 
         static GameManager()
         {
-            Settings = new GameSettings();
-            Settings.SetStandartPreset();
-            //Settings.Save();
+            // Load();
         }
 
-        public static void DeleteCell(int posX, int posY)
+        public static void Start(Game game = null, GameSettings settings = null)
         {
-            CurrentField.GameObjects.Remove(CurrentField.Cells[posX][posY]);
-            CurrentField.Cells[posX][posY] = null;
-        }
-
-        public static void Start(IPresenter presenter = null, Field field = null)
-        {
-            if (field == null)
+            if (game == null)
             {
-                CurrentField = new Field(Settings.Size.Key, Settings.Size.Value);
-                foreach (var item in Settings.StartPreset)
-                {
-                    CurrentField.AddCell(new Grass(item.Key, item.Value));
-                }
+                game = new Game(settings);
+                if (settings != null)
+                    game.Settings = settings;
+                Games.Add(game);
             }
             else
-                CurrentField = field;
-
-            Game = true;
-            CurrentField.SetPresenter(presenter);
-            CurrentField.Iteration();
-
+                game.IsGame = true;
+            game.CurrentField.Iteration();
         }
 
-        public static void Stop()
-        {
-            Game = false;
-        }
-       
+
         public static void Save()
         {
+
             // DataContractJsonSerializer d = new DataContractJsonSerializer(typeof(Field));
+            BLL.Services.SaveService<Save> fg = new BLL.Services.SaveService<Save>(new DAL.EntityFramework.Transaction.UnitOfWork(new Model1()));
+
             XmlSerializer s = new XmlSerializer(typeof(Field));
             var f_ = new MemoryStream();
-            s.Serialize(f_, CurrentField);
-     
-            using (var db = new Model1())
+            foreach (var item in GameManager.Games)
             {
-                if (db.MyEntities.Count() < 1)
-                    db.MyEntities.Add(new S(Encoding.UTF8.GetString(f_.ToArray())));
-                else
-                    db.MyEntities.Find(1).Name = Encoding.UTF8.GetString(f_.ToArray());
-                db.SaveChanges();              
-                f_.Close();
+                s.Serialize(f_, item.CurrentField);
+                var field = Encoding.UTF8.GetString(f_.ToArray());
+                // f_.Dispose();
+                f_ = new MemoryStream();
+                s = new XmlSerializer(typeof(GameSettings));
+                s.Serialize(f_, item.Settings);
+                var setting = Encoding.UTF8.GetString(f_.ToArray());
+                fg.Add(new Save(field, setting));
+              //  f_.Dispose();
             }
-            Settings.Save();
+            //using (var db = new Model1())
+            //{
+            //    if (db.MyEntities.Count() < 1)
+            //        db.MyEntities.Add(new S(Encoding.UTF8.GetString(f_.ToArray())));
+            //    else
+            //        db.MyEntities.Find(1).Name = Encoding.UTF8.GetString(f_.ToArray());
+            //    db.SaveChanges();
+
+            //}
+            f_.Close();
+            //  Settings.Save();
 
         }
 
-        public static Field Load()
+        public static void Load()
         {
-            Settings.Load();
-            using (var db = new Model1())
+             
+            var serializer = new XmlSerializer(typeof(Field));
+            MemoryStream stream;
+            BLL.Services.SaveService<Save> fg = new BLL.Services.SaveService<Save>(new DAL.EntityFramework.Transaction.UnitOfWork(new Model1()));
+
+
+            foreach (var item in fg.GetAll())
             {
-                var serializer =  new XmlSerializer(typeof(Field));
-                var b = new MemoryStream(Encoding.UTF8.GetBytes(db.MyEntities.Find(1).Name));
-                var field = serializer.Deserialize(b) as Field;              
-                return field;
-            }                        
+                stream = new MemoryStream(Encoding.UTF8.GetBytes(item.Field));
+                var field = serializer.Deserialize(stream) as Field;
+                stream = new MemoryStream(Encoding.UTF8.GetBytes(item.Setting));
+                serializer = new XmlSerializer(typeof(GameSettings));
+                var setting = serializer.Deserialize(stream) as GameSettings;
+                var game = new Game();
+                game.CurrentField = field;
+                game.Id = (uint)item.Id;
+                game.Settings = setting;
+                GameManager.Games.Add(game);
+            }
+            //using (var db = new Model1())
+            //{
+            //    
+            //    var b = new MemoryStream(Encoding.UTF8.GetBytes(db.MyEntities.Find(1).Name));
+            //    var field = serializer.Deserialize(b) as Field;
+            //    return field;
+            //}
         }
     }
 }

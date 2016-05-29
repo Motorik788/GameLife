@@ -16,8 +16,8 @@ namespace Core
         {
             Thread threadInput = new Thread(Watch);
             threadInput.IsBackground = true;
-            threadInput.Start();
-            threadInput.Priority = ThreadPriority.AboveNormal;
+            threadInput.Priority = ThreadPriority.Highest;
+            threadInput.Start();            
         }
 
         static void Watch()

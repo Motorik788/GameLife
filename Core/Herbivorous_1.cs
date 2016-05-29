@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LifeTest
+namespace Core
 {
     public class Herbivorous_1 : ContentBase, IBehavior, Core.IAnimal
     {
@@ -46,15 +46,7 @@ namespace LifeTest
             }
         }
 
-        public void Die()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Do(Field field)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         public void Eat()
         {
@@ -67,6 +59,16 @@ namespace LifeTest
         }
 
         public void Walk()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Do(Game Game_field)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Die(Game game)
         {
             throw new NotImplementedException();
         }

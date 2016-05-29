@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LifeTest
+namespace Core
 {
     public class Grass_2 : ContentBase, IBehavior
     {
@@ -23,13 +23,14 @@ namespace LifeTest
 
         }
         public Grass_2() { }
+     
 
-        public void Die()
+        public bool Do(Game Game_field)
         {
             throw new NotImplementedException();
         }
 
-        public bool Do(Field field)
+        public void Die(Game game)
         {
             throw new NotImplementedException();
         }
