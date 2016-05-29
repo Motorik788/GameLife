@@ -38,8 +38,7 @@ namespace Core
         {
 
             // DataContractJsonSerializer d = new DataContractJsonSerializer(typeof(Field));
-            BLL.Services.SaveService<Save> fg = new BLL.Services.SaveService<Save>(new DAL.EntityFramework.Transaction.UnitOfWork(new Model1()));
-
+            BLL.Services.SaveService<DAL.Save> fg = new BLL.Services.SaveService<DAL.Save>(new DAL.EntityFramework.Transaction.UnitOfWork(new DAL.Model1()));
             XmlSerializer s = new XmlSerializer(typeof(Field));
             var f_ = new MemoryStream();
             foreach (var item in GameManager.Games)
@@ -51,9 +50,10 @@ namespace Core
                 s = new XmlSerializer(typeof(GameSettings));
                 s.Serialize(f_, item.Settings);
                 var setting = Encoding.UTF8.GetString(f_.ToArray());
-                fg.Add(new Save(field, setting));
-              //  f_.Dispose();
+                fg.Add(new DAL.Save(field, setting));
+                //  f_.Dispose();
             }
+            fg.unitOfWork.Commit();
             //using (var db = new Model1())
             //{
             //    if (db.MyEntities.Count() < 1)
@@ -70,11 +70,11 @@ namespace Core
 
         public static void Load()
         {
-             
+
             var serializer = new XmlSerializer(typeof(Field));
             MemoryStream stream;
-            BLL.Services.SaveService<Save> fg = new BLL.Services.SaveService<Save>(new DAL.EntityFramework.Transaction.UnitOfWork(new Model1()));
-
+            BLL.Services.SaveService<DAL.Save> fg = new BLL.Services.SaveService<DAL.Save>(new DAL.EntityFramework.Transaction.UnitOfWork(new DAL.Model1()));
+            fg.unitOfWork.Commit();
 
             foreach (var item in fg.GetAll())
             {

@@ -72,7 +72,6 @@
     <Compile Include="Service\IService.cs" />
     <Compile Include="Service\Service.cs" />
     <None Include="App.config" />
-    <Compile Include="Model1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="packages.config" />
   </ItemGroup>
