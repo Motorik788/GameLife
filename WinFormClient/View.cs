@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core;
 
-namespace Core
+namespace WinFormClient
 {
-    public interface IWalkable
+    public class View : IPresenter
     {
-        int Speed { get; set; }
-        void Walk(Game game);
+        public void Present(Field field)
+        {
+
+        }
     }
 }

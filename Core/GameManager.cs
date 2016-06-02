@@ -41,11 +41,15 @@ namespace Core
             BLL.Services.SaveService<DAL.Save> fg = new BLL.Services.SaveService<DAL.Save>(new DAL.EntityFramework.Transaction.UnitOfWork(new DAL.Model1()));
             XmlSerializer s = new XmlSerializer(typeof(Field));
             var f_ = new MemoryStream();
+            foreach (var item in fg.GetAll())
+            {
+                fg.Delete(item.Id);
+            }
             foreach (var item in GameManager.Games)
             {
                 s.Serialize(f_, item.CurrentField);
                 var field = Encoding.UTF8.GetString(f_.ToArray());
-                // f_.Dispose();
+                f_.Dispose();
                 f_ = new MemoryStream();
                 s = new XmlSerializer(typeof(GameSettings));
                 s.Serialize(f_, item.Settings);

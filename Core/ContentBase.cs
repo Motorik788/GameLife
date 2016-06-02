@@ -8,9 +8,8 @@ using System.Xml.Serialization;
 
 namespace Core
 {
-
-     [XmlInclude(typeof(Grass))]
-     [XmlInclude(typeof(Grass_2))]
+    [XmlInclude(typeof(Grass))]
+    [XmlInclude(typeof(Grass_2))]
     [XmlInclude(typeof(Herbivorous_1))]
     [DataContract]
     [KnownType(typeof(Grass))]
@@ -40,12 +39,7 @@ namespace Core
             Icon = ico;
         }
 
-        public static bool operator true(ContentBase content)
-        {
-            return content != null;
-        }
-
-        public static bool operator false(ContentBase content)
+        public static implicit operator bool(ContentBase content)
         {
             return content != null;
         }

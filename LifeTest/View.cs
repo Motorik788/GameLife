@@ -21,7 +21,7 @@ namespace Core
                            {
                                if (Input.GetKey() == ConsoleKey.S)
                                {                                  
-                                   Program.chanell.StopGame(Program.currentGame);
+                                   Program.Chanell.StopGame(Program.CurrentGame);
                                    break;
                                }
                            }
@@ -33,18 +33,18 @@ namespace Core
             {
                 Console.CursorLeft = 0;
                 Console.CursorTop = 1;
-                for (int i = 0; i < field.XLenght; i++)
+                for (int i = 0; i < field.YLenght; i++)
                 {
-                    for (int j = 0; j < field.YLenght; j++)
+                    for (int j = 0; j < field.XLenght; j++)
                     {
-                        if (field.Cells[i][j])
+                        if (field.Cells[i][j] != null)
                             Console.Write("{0}|", field.Cells[i][j].Icon);
                         else
                             Console.Write(" |");
                     }
                     Console.WriteLine();
                     int g = 0;
-                    for (int k = 0; k < field.YLenght * 2; k++)
+                    for (int k = 0; k < field.XLenght * 2; k++)
                     {
                         if (g != 1)
                             Console.Write("-");
@@ -57,7 +57,7 @@ namespace Core
                     }
                     Console.WriteLine();
                 }
-                Console.WriteLine("Поколение {0}, Травы {1}", field.Generation, field.GameObjects.Count);
+                Console.WriteLine("Поколение {0}, Обьектов {1}", field.Generation, field.GameObjects.Count);
             }
         }
     }

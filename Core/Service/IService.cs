@@ -14,6 +14,9 @@ namespace Core.Service
         Field GetGameState(int gameId);
 
         [OperationContract]
+        void DeleteGame(int gameId);
+
+        [OperationContract]
         int StartNewGame(int gameId,GameSettings settings = null);
 
         [OperationContract]

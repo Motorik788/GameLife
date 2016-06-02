@@ -15,7 +15,9 @@ namespace Core
     [DataContract]
     [XmlRoot]
     public class Field
-    {
+    {/// <summary>
+    /// y, x
+    /// </summary>
         [DataMember]
         [XmlArray]
         public ContentBase[][] Cells;
@@ -36,10 +38,10 @@ namespace Core
 
         public Field(int x, int y)
         {
-            Cells = new ContentBase[x][];
-            for (int i = 0; i < x; i++)
+            Cells = new ContentBase[y][];
+            for (int i = 0; i < y; i++)
             {
-                Cells[i] = new ContentBase[y];
+                Cells[i] = new ContentBase[x];
             }
             XLenght = x;
             YLenght = y;
@@ -50,7 +52,7 @@ namespace Core
             var game = GameManager.Games.Find(x => x.CurrentField == this);
             while (game.IsGame)
             {
-                Thread.Sleep(100);
+                Thread.Sleep(400);
                 Generation++;
                 for (int i = 0; i < GameObjects.Count; i++)
                 {
@@ -61,15 +63,22 @@ namespace Core
 
         public void AddCell(ContentBase content)
         {
-            if (Cells.GetLength(0) > content.PosX)
+            if (!Cells[content.PosY][content.PosX])
             {
-                if (Cells[content.PosX].Length > content.PosY)
+                if (Cells.GetLength(0) > content.PosY)
                 {
-                    Cells[content.PosX][content.PosY] = content;
-                    GameObjects.Add(content);
+                    if (Cells[content.PosY].Length > content.PosX)
+                    {
+                        Cells[content.PosY][content.PosX] = content;
+                        GameObjects.Add(content);
+                    }
                 }
             }
-
+        }
+        public void DeleteCell(int posX, int posY)
+        {
+            GameObjects.Remove(Cells[posY][posX]);
+            Cells[posY][posX] = null;
         }
     }
 }

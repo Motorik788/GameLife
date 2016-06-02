@@ -21,7 +21,7 @@ namespace LifeHost
             host.AddServiceEndpoint(contract, binding, adrr);
             host.Open();
             Console.WriteLine("Opened");
-            Console.WriteLine("Press Any key for close");
+            Console.WriteLine("Press Any key for close and Save All Games");
             Console.ReadKey();
             GameManager.Save();
             host.Close();

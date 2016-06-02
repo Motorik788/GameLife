@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "C:\Users\dryzu\Deskt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LifeHost", "LifeHost\LifeHost.csproj", "{51396590-A8EE-4A1F-A7DA-980277586B47}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormClient", "WinFormClient\WinFormClient.csproj", "{A38C0DD0-28FF-40BF-AC22-A45E40A1F574}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{51396590-A8EE-4A1F-A7DA-980277586B47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51396590-A8EE-4A1F-A7DA-980277586B47}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51396590-A8EE-4A1F-A7DA-980277586B47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A38C0DD0-28FF-40BF-AC22-A45E40A1F574}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A38C0DD0-28FF-40BF-AC22-A45E40A1F574}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A38C0DD0-28FF-40BF-AC22-A45E40A1F574}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A38C0DD0-28FF-40BF-AC22-A45E40A1F574}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

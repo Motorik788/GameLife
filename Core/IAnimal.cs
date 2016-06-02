@@ -9,7 +9,7 @@ namespace Core
    public interface IAnimal: IWalkable
     {
         int Energy { get;  }
-        void Eat();
-        void Reproduce();
+        void Eat(Game game);
+        void Reproduce(Game game);
     }
 }

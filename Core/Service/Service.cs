@@ -21,6 +21,12 @@ namespace Core.Service
             return null;
         }
 
+        public void DeleteGame(int gameId)
+        {
+            GameManager.Games.RemoveAll(x => x.Id == gameId);
+            GameManager.Save();
+        }
+
         public IEnumerable<Game> GetAllGames()
         {
             return GameManager.Games;
@@ -28,13 +34,16 @@ namespace Core.Service
 
         public Field GetGameState(int gameId)
         {
-            return GameManager.Games.Find(x => x.Id == gameId).CurrentField;
+            if (GameManager.Games.Exists(x => x.Id == gameId))
+                return GameManager.Games.Find(x => x.Id == gameId).CurrentField;
+            else return null;
         }
 
         public bool IsGame(int gameId)
         {
-            return GameManager.Games.Find(x => x.Id == gameId).IsGame;
-            // return false;
+            if (GameManager.Games.Exists(x => x.Id == gameId))
+                return GameManager.Games.Find(x => x.Id == gameId).IsGame;
+            else return false;
         }
 
         public int StartNewGame(int gameId = -1, GameSettings settings = null)

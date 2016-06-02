@@ -29,6 +29,14 @@ namespace Core
     [DataContract]
     public class GameSettings
     {
+        public enum GameModes
+        {
+            OnlyGrass = 1,
+            OnlyGrass_2,
+            MixedGrass,
+            WithAnimals
+        }
+
         [DataMember]
         public Pair<int, int>[] StartPreset { get; set; }
         [DataMember]
@@ -37,6 +45,22 @@ namespace Core
         [DataMember]
         [XmlElement]
         public int MaxCloseCells { get; set; }
+        [DataMember]
+        [XmlElement]
+        public GameModes GameMode { get; set; }
+        [DataMember]
+        [XmlElement]
+        public int AnimalBaseEnergy { get; set; }
+        [DataMember]
+        [XmlElement]
+        public int AnimalBaseSpeed { get; set; }
+        [DataMember]
+        [XmlElement]
+        public int AnimalBaseDeathVisible { get; set; }
+        [DataMember]
+        [XmlElement]
+        public int Grass_2_TimeOut { get; set; }
+
 
         public GameSettings()
         {
@@ -60,7 +84,17 @@ namespace Core
                 StartPreset = set.StartPreset;
                 Size = set.Size;
                 MaxCloseCells = set.MaxCloseCells;
+                GameMode = set.GameMode;
+                AnimalBaseEnergy = set.AnimalBaseEnergy;
+                AnimalBaseSpeed = set.AnimalBaseSpeed;
+                AnimalBaseDeathVisible = set.AnimalBaseDeathVisible;
+                Grass_2_TimeOut = set.Grass_2_TimeOut;
                 file.Close();
+            }
+            else
+            {
+                SetStandartPreset();
+                Save();
             }
         }
 
@@ -77,19 +111,28 @@ namespace Core
             file.Close();
         }
 
+        public void SetRandomStartPreset()
+        {
+            var r = new Random();
+            Pair<int, int>[] standart = new Pair<int, int>[r.Next(3, Size.Key * Size.Key / 3)];
+            for (int i = 0; i < standart.Length; i++)
+            {
+                standart[i] = new Pair<int, int>(r.Next(0, Size.Key-1), r.Next(0, Size.Value-1));
+            }
+            StartPreset = standart;
+        }
+
         public void SetStandartPreset()
         {
             Size = new Pair<int, int>(10, 10);
-            var r = new Random();
-            Pair<int, int>[] standart = new Pair<int, int>[r.Next(3, Size.Key * Size.Key / 2)];
-            for (int i = 0; i < standart.Length; i++)
-            {
-                standart[i] = new Pair<int, int>(r.Next(0, 9), r.Next(0, 9));
-            }
-
-            StartPreset = standart;
-
+           
+            SetRandomStartPreset();
+            GameMode = GameModes.OnlyGrass;
+            AnimalBaseEnergy = 10;
+            AnimalBaseDeathVisible = 2;
+            AnimalBaseSpeed = 2;
             MaxCloseCells = 4;
+            Grass_2_TimeOut = 4;
         }
 
     }

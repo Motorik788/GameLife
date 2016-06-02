@@ -39,7 +39,7 @@ namespace Core
                     {
                         if (j > -1 && j < field.CurrentField.XLenght && i > -1 && i < field.CurrentField.YLenght)
                         {
-                            if (field.CurrentField.Cells[j ][i])
+                            if (field.CurrentField.Cells[i ][j] != null)
                             {
                                 cells++;
 
@@ -72,7 +72,7 @@ namespace Core
 
         public void Die(Game game)
         {
-            game.DeleteCell(PosX, PosY);
+            game.CurrentField.DeleteCell(PosX, PosY);
         }
     }
 }
