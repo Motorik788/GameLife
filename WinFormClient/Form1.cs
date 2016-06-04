@@ -45,11 +45,12 @@ namespace WinFormClient
             {
 
             }
+
             setting = new GameSettings();
             setting.Load();
             InitSettingControls();
             view = new View();
-            bitMap = new Bitmap(userControl11.Size.Width, userControl11.Size.Height);
+            bitMap = new Bitmap(userControl12.Size.Width, userControl12.Size.Height);
         }
 
         void InitSettingControls()
@@ -79,9 +80,9 @@ namespace WinFormClient
 
                         BeginInvoke((Action)delegate
                         {
-                            if (userControl11 != null)
-                                view.Present(field, userControl11);
-
+                            if (userControl12 != null)
+                                view.Present(field, userControl12);
+                            
                             GenerationLabel.Text = string.Format("Generaton {0}", field.Generation);
                             GameObjectsLabel.Text = string.Format("GameObjects {0}", field.GameObjects.Count);
                         });

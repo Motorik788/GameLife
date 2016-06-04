@@ -30,7 +30,6 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabMain = new System.Windows.Forms.TabPage();
-            this.userControl11 = new WinFormClient.UserControl1();
             this.GameObjectsLabel = new System.Windows.Forms.Label();
             this.GenerationLabel = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -60,6 +59,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.textSizeX = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.userControl12 = new WinFormClient.UserControl1();
             this.tabControl1.SuspendLayout();
             this.tabMain.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -80,7 +80,7 @@
             // 
             // tabMain
             // 
-            this.tabMain.Controls.Add(this.userControl11);
+            this.tabMain.Controls.Add(this.userControl12);
             this.tabMain.Controls.Add(this.GameObjectsLabel);
             this.tabMain.Controls.Add(this.GenerationLabel);
             this.tabMain.Controls.Add(this.menuStrip1);
@@ -91,15 +91,6 @@
             this.tabMain.TabIndex = 0;
             this.tabMain.Text = "Main";
             this.tabMain.UseVisualStyleBackColor = true;
-            // 
-            // userControl11
-            // 
-            this.userControl11.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.userControl11.Location = new System.Drawing.Point(8, 31);
-            this.userControl11.Name = "userControl11";
-            this.userControl11.Size = new System.Drawing.Size(584, 584);
-            this.userControl11.TabIndex = 4;
-            this.userControl11.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // GameObjectsLabel
             // 
@@ -380,6 +371,15 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Size Field:";
             // 
+            // userControl12
+            // 
+            this.userControl12.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.userControl12.Location = new System.Drawing.Point(8, 58);
+            this.userControl12.Name = "userControl12";
+            this.userControl12.Size = new System.Drawing.Size(584, 584);
+            this.userControl12.TabIndex = 4;
+            this.userControl12.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -433,7 +433,7 @@
         private System.Windows.Forms.Label GenerationLabel;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label GameObjectsLabel;
-        private UserControl1 userControl11;
+        private UserControl1 userControl12;
     }
 }
 
