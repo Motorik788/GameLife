@@ -28,8 +28,9 @@ namespace Core
         {
 
         }
-        // [DataMember]
-        //[XmlElement]
+
+       // [DataMember]
+       // [XmlElement]
         public virtual IBehavior Behavior { get; }
 
         public ContentBase(int x, int y, char ico)

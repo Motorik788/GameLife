@@ -15,7 +15,7 @@ namespace Core
             speed = speed_;
             DieIteration = deathVis;
         }
-        public Herbivorous_1() { }
+        public Herbivorous_1() { DieIteration = 1; energy = 10; speed = 1; }
 
         int DieIteration = 1;
         int energy = 10;
@@ -94,6 +94,8 @@ namespace Core
          
             double len = 1000000;
             var go = Game.CurrentField.GameObjects.Find(x => x == this);
+            if (go == null)
+                return;
             foreach (var item in Game.CurrentField.GameObjects)
             {
                 if (item is Grass || item is Grass_2)
@@ -142,7 +144,7 @@ namespace Core
                 go.PosY = go.PosY - speed;
                 return;
             }
-            if (go.PosY < destY && go.PosY + speed >= 0 && !(Game.CurrentField.Cells[go.PosY + speed][go.PosX ] is Herbivorous_1))
+            if (go.PosY < destY && (go.PosY + speed >= 0 && go.PosY + speed < Game.CurrentField.YLenght) && !(Game.CurrentField.Cells[go.PosY + speed][go.PosX ] is Herbivorous_1))
             {
                 Game.CurrentField.Cells[go.PosY][go.PosX] = null;
                 if ((Game.CurrentField.Cells[go.PosY + speed][go.PosX ] is Grass) || (Game.CurrentField.Cells[go.PosY + speed][go.PosX ] is Grass_2))

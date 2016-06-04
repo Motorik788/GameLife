@@ -30,8 +30,9 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabMain = new System.Windows.Forms.TabPage();
+            this.userControl11 = new WinFormClient.UserControl1();
+            this.GameObjectsLabel = new System.Windows.Forms.Label();
             this.GenerationLabel = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.newGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.startNewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,7 +60,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.textSizeX = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.GameObjectsLabel = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabMain.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -73,42 +73,56 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(991, 514);
+            this.tabControl1.Size = new System.Drawing.Size(894, 693);
             this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl1.TabIndex = 0;
             this.tabControl1.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tabControl1_Selecting);
             // 
             // tabMain
             // 
+            this.tabMain.Controls.Add(this.userControl11);
             this.tabMain.Controls.Add(this.GameObjectsLabel);
             this.tabMain.Controls.Add(this.GenerationLabel);
-            this.tabMain.Controls.Add(this.panel1);
             this.tabMain.Controls.Add(this.menuStrip1);
             this.tabMain.Location = new System.Drawing.Point(4, 22);
             this.tabMain.Name = "tabMain";
             this.tabMain.Padding = new System.Windows.Forms.Padding(3);
-            this.tabMain.Size = new System.Drawing.Size(983, 488);
+            this.tabMain.Size = new System.Drawing.Size(886, 667);
             this.tabMain.TabIndex = 0;
             this.tabMain.Text = "Main";
             this.tabMain.UseVisualStyleBackColor = true;
             // 
+            // userControl11
+            // 
+            this.userControl11.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.userControl11.Location = new System.Drawing.Point(8, 31);
+            this.userControl11.Name = "userControl11";
+            this.userControl11.Size = new System.Drawing.Size(584, 584);
+            this.userControl11.TabIndex = 4;
+            this.userControl11.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            // 
+            // GameObjectsLabel
+            // 
+            this.GameObjectsLabel.AutoSize = true;
+            this.GameObjectsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.GameObjectsLabel.Location = new System.Drawing.Point(641, 106);
+            this.GameObjectsLabel.Name = "GameObjectsLabel";
+            this.GameObjectsLabel.Size = new System.Drawing.Size(125, 24);
+            this.GameObjectsLabel.TabIndex = 3;
+            this.GameObjectsLabel.Text = "GameObjects";
+            // 
             // GenerationLabel
             // 
+            this.GenerationLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.GenerationLabel.AutoSize = true;
             this.GenerationLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.GenerationLabel.Location = new System.Drawing.Point(628, 59);
+            this.GenerationLabel.Location = new System.Drawing.Point(641, 58);
             this.GenerationLabel.Name = "GenerationLabel";
             this.GenerationLabel.Size = new System.Drawing.Size(103, 24);
             this.GenerationLabel.TabIndex = 2;
             this.GenerationLabel.Text = "Generation";
-            // 
-            // panel1
-            // 
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel1.Location = new System.Drawing.Point(19, 31);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(553, 435);
-            this.panel1.TabIndex = 1;
             // 
             // menuStrip1
             // 
@@ -117,7 +131,7 @@
             this.gamesOnServerToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(3, 3);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(977, 25);
+            this.menuStrip1.Size = new System.Drawing.Size(880, 25);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -212,7 +226,7 @@
             this.tabSetting.Location = new System.Drawing.Point(4, 22);
             this.tabSetting.Name = "tabSetting";
             this.tabSetting.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSetting.Size = new System.Drawing.Size(983, 488);
+            this.tabSetting.Size = new System.Drawing.Size(886, 667);
             this.tabSetting.TabIndex = 1;
             this.tabSetting.Text = "Settings";
             this.tabSetting.UseVisualStyleBackColor = true;
@@ -302,8 +316,9 @@
             // 
             // button1
             // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button1.Location = new System.Drawing.Point(898, 436);
+            this.button1.Location = new System.Drawing.Point(801, 625);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(79, 26);
             this.button1.TabIndex = 6;
@@ -365,22 +380,13 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Size Field:";
             // 
-            // GameObjectsLabel
-            // 
-            this.GameObjectsLabel.AutoSize = true;
-            this.GameObjectsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.GameObjectsLabel.Location = new System.Drawing.Point(628, 107);
-            this.GameObjectsLabel.Name = "GameObjectsLabel";
-            this.GameObjectsLabel.Size = new System.Drawing.Size(125, 24);
-            this.GameObjectsLabel.TabIndex = 3;
-            this.GameObjectsLabel.Text = "GameObjects";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(996, 519);
+            this.ClientSize = new System.Drawing.Size(915, 702);
             this.Controls.Add(this.tabControl1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "Form1";
             this.Text = "Form1";
             this.tabControl1.ResumeLayout(false);
@@ -425,9 +431,9 @@
         private System.Windows.Forms.TextBox textSpeed;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label GenerationLabel;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label GameObjectsLabel;
+        private UserControl1 userControl11;
     }
 }
 

@@ -39,23 +39,23 @@ namespace Core
 
             // DataContractJsonSerializer d = new DataContractJsonSerializer(typeof(Field));
             BLL.Services.SaveService<DAL.Save> fg = new BLL.Services.SaveService<DAL.Save>(new DAL.EntityFramework.Transaction.UnitOfWork(new DAL.Model1()));
-            XmlSerializer s = new XmlSerializer(typeof(Field));
-            var f_ = new MemoryStream();
+            XmlSerializer s;
+            MemoryStream f_ = new MemoryStream();
             foreach (var item in fg.GetAll())
             {
                 fg.Delete(item.Id);
             }
             foreach (var item in GameManager.Games)
             {
+                f_ = new MemoryStream();
+                s = new XmlSerializer(typeof(Field));
                 s.Serialize(f_, item.CurrentField);
                 var field = Encoding.UTF8.GetString(f_.ToArray());
-                f_.Dispose();
                 f_ = new MemoryStream();
                 s = new XmlSerializer(typeof(GameSettings));
                 s.Serialize(f_, item.Settings);
                 var setting = Encoding.UTF8.GetString(f_.ToArray());
                 fg.Add(new DAL.Save(field, setting));
-                //  f_.Dispose();
             }
             fg.unitOfWork.Commit();
             //using (var db = new Model1())
@@ -67,6 +67,7 @@ namespace Core
             //    db.SaveChanges();
 
             //}
+
             f_.Close();
             //  Settings.Save();
 
@@ -75,13 +76,14 @@ namespace Core
         public static void Load()
         {
 
-            var serializer = new XmlSerializer(typeof(Field));
-            MemoryStream stream;
+            XmlSerializer serializer;
+            MemoryStream stream = null;
             BLL.Services.SaveService<DAL.Save> fg = new BLL.Services.SaveService<DAL.Save>(new DAL.EntityFramework.Transaction.UnitOfWork(new DAL.Model1()));
             fg.unitOfWork.Commit();
 
             foreach (var item in fg.GetAll())
             {
+                serializer = new XmlSerializer(typeof(Field));
                 stream = new MemoryStream(Encoding.UTF8.GetBytes(item.Field));
                 var field = serializer.Deserialize(stream) as Field;
                 stream = new MemoryStream(Encoding.UTF8.GetBytes(item.Setting));
@@ -93,6 +95,8 @@ namespace Core
                 game.Settings = setting;
                 GameManager.Games.Add(game);
             }
+            if (stream != null)
+                stream.Close();
             //using (var db = new Model1())
             //{
             //    

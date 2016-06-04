@@ -21,32 +21,35 @@ namespace WinFormClient
         public static int CurrentGame = -1;
         GameSettings setting;
         View view;
+        public static Bitmap bitMap;
 
         public Form1()
         {
             InitializeComponent();
             try
             {
-                Uri uri = new Uri("http://localhost:4000/LifeService");
+                //Uri uri = new Uri("http://localhost:4000/LifeService");
 
-                BasicHttpBinding binding = new BasicHttpBinding("BasicHttpBinding_LifeService");
+                //BasicHttpBinding binding = new BasicHttpBinding("BasicHttpBinding_LifeService");
 
-                EndpointAddress endpoint = new EndpointAddress(uri);
+                //EndpointAddress endpoint = new EndpointAddress(uri);
 
-                ChannelFactory<IService> factory = new ChannelFactory<IService>(binding, endpoint);
+                //ChannelFactory<IService> factory = new ChannelFactory<IService>(binding, endpoint);
 
 
-                Chanell = factory.CreateChannel();
+                //Chanell = factory.CreateChannel();
+                var cl = new ClientService("BasicHttpBinding_LifeService");
+                Chanell = cl.ChannelFactory.CreateChannel();
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
-                Console.ReadKey();
+
             }
             setting = new GameSettings();
             setting.Load();
             InitSettingControls();
             view = new View();
+            bitMap = new Bitmap(userControl11.Size.Width, userControl11.Size.Height);
         }
 
         void InitSettingControls()
@@ -60,27 +63,33 @@ namespace WinFormClient
             textSpeed.Text = setting.AnimalBaseSpeed.ToString();
         }
 
+
+
         public void Play()
         {
             Task.Run(() =>
             {
-                try
-                {
-                    while (Chanell.IsGame(CurrentGame))
-                    {
-                        var field = Chanell.GetGameState(CurrentGame);
-                        BeginInvoke((Action)delegate
-                         {
-                             view.Present(field);
-                             GenerationLabel.Text = field.Generation.ToString();
-                         });
-                        Thread.Sleep(500);
-                    }
-                }
-                catch (Exception ex)
-                {
+                Field field;
 
+                do
+                {
+                    try
+                    {
+                        field = Chanell.GetGameState(CurrentGame);
+
+                        BeginInvoke((Action)delegate
+                        {
+                            if (userControl11 != null)
+                                view.Present(field, userControl11);
+
+                            GenerationLabel.Text = string.Format("Generaton {0}", field.Generation);
+                            GameObjectsLabel.Text = string.Format("GameObjects {0}", field.GameObjects.Count);
+                        });
+                        Thread.Sleep(300);
+                    }
+                    catch (Exception ex) { }
                 }
+                while (Chanell.IsGame(CurrentGame));
             });
         }
 
@@ -89,7 +98,7 @@ namespace WinFormClient
             setting.GameMode = mode;
             try
             {
-                CurrentGame = Chanell.StartNewGame(CurrentGame, setting);
+                CurrentGame = Chanell.StartNewGame(-1, setting);
                 Play();
             }
             catch (Exception ex)
@@ -97,6 +106,8 @@ namespace WinFormClient
                 MessageBox.Show(ex.ToString());
             }
         }
+
+
 
         private void gamesOnServerToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -166,7 +177,7 @@ namespace WinFormClient
                 MessageBox.Show("Error format!");
                 return;
             }
-
+            setting.SetRandomStartPreset();
             setting.Save();
 
         }
@@ -179,7 +190,14 @@ namespace WinFormClient
 
         private void button2_Click(object sender, EventArgs e)
         {
-            setting.SetRandomStartPreset();            
+            setting.SetRandomStartPreset();
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            var g = e.Graphics;
+            if (bitMap != null)
+                g.DrawImage(bitMap, 0, 0);
         }
     }
 }

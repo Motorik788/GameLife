@@ -44,7 +44,7 @@ namespace Core
                 try
                 {
                     pres.Present(Chanell.GetGameState(CurrentGame));
-                    Thread.Sleep(450);
+                    Thread.Sleep(300);
                 }
                 catch (Exception ex)
                 {
@@ -205,16 +205,19 @@ namespace Core
         {
             try
             {
-                Uri uri = new Uri("http://localhost:4000/LifeService");
+                //Uri uri = new Uri("http://localhost:4000/LifeService");
 
-                BasicHttpBinding binding = new BasicHttpBinding("BasicHttpBinding_LifeService");
-
-                EndpointAddress endpoint = new EndpointAddress(uri);
-
-                ChannelFactory<IService> factory = new ChannelFactory<IService>(binding, endpoint);
+                //BasicHttpBinding binding = new BasicHttpBinding("BasicHttpBinding_LifeService");
 
 
-                Chanell = factory.CreateChannel();
+                //EndpointAddress endpoint = new EndpointAddress(uri);
+
+                //ChannelFactory<IService> factory = new ChannelFactory<IService>(binding, endpoint);
+
+
+                //Chanell = factory.CreateChannel();
+                var cl = new ClientService("BasicHttpBinding_LifeService");
+                Chanell = cl.ChannelFactory.CreateChannel();
             }
             catch (Exception ex)
             {

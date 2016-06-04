@@ -15,9 +15,10 @@ namespace Core
     [DataContract]
     [XmlRoot]
     public class Field
-    {/// <summary>
-    /// y, x
-    /// </summary>
+    {
+        /// <summary>
+        /// y, x
+        /// </summary>
         [DataMember]
         [XmlArray]
         public ContentBase[][] Cells;
@@ -52,11 +53,12 @@ namespace Core
             var game = GameManager.Games.Find(x => x.CurrentField == this);
             while (game.IsGame)
             {
-                Thread.Sleep(400);
+                Thread.Sleep(250);
                 Generation++;
-                for (int i = 0; i < GameObjects.Count; i++)
+                var goCopy = GameObjects.ToArray();
+                for (int i = 0; i < goCopy.Length; i++)
                 {
-                    GameObjects[i].Behavior.Do(game);
+                    goCopy[i].Behavior.Do(game);
                 }
             }
         }
@@ -75,6 +77,7 @@ namespace Core
                 }
             }
         }
+
         public void DeleteCell(int posX, int posY)
         {
             GameObjects.Remove(Cells[posY][posX]);
