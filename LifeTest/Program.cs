@@ -4,110 +4,90 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
-using System.Web.Script.Serialization;
 using System.IO;
-using System.Data.Entity;
+using Core.Service;
+using System.ServiceModel;
 
-
-namespace LifeTest
+namespace Core
 {
     class Program
     {
+        public static IService Chanell;
+        public static int CurrentGame = -1;
+
         enum States
         {
             Main,
-            Settings
-        }
-
-        public static class Input
-        {
-            static ConsoleKeyInfo Key;
-            public static object ob = new object();
-
-            static Input()
-            {
-                Thread threadInput = new Thread(Watch);
-                threadInput.IsBackground = true;
-                threadInput.Start();
-                threadInput.Priority = ThreadPriority.AboveNormal;
-            }
-
-            static void Watch()
-            {
-                while (true)
-                {
-                    lock (ob)
-                    {
-                        Key = Console.ReadKey(true);
-                    }
-                }
-            }
-
-            public static ConsoleKey GetKey()
-            {
-                lock (ob)
-                {
-                    return Key.Key;
-                }
-            }
+            Settings,
+            GamesVisor
         }
 
         static States state = States.Main;
-        delegate void StartGameMenu(IPresenter presenter = null, Field field = null);
 
-        static void StartMenu(IPresenter presenter = null, Field field = null)
+        static void StartMenu()
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("(S)-Стоп");
             Console.ForegroundColor = ConsoleColor.Gray;
-            GameManager.Start(presenter, field);
+            Game();
             Console.CursorLeft = 0;
             Console.CursorTop = 0;
-            Console.WriteLine("(Escape)-Сохранить и выйти, (S)-Старт, (Enter)-Продолжить, (Space)-Настройки");
+            Console.WriteLine("(Escape)- Выйти, (S)-Старт, (Enter)-Продолжить, (Space)-Настройки");
+        }
+
+        static void Game()
+        {
+            View.ConsolePresenter pres = new View.ConsolePresenter();
+            do
+            {
+                try
+                {
+                    pres.Present(Chanell.GetGameState(CurrentGame));
+                    Thread.Sleep(300);
+                }
+                catch (Exception ex)
+                {
+                    //Console.WriteLine(ex);
+                }
+            }
+            while (Chanell.IsGame(CurrentGame));
         }
 
         static void Menu()
         {
             bool menu = true;
+            GameSettings settings = new GameSettings();
+            settings.Load();
             while (menu)
             {
+                ConsoleKey key;
                 Console.Clear();
                 Console.WriteLine("Главное меню");
-                Console.WriteLine("(Escape)-Сохранить и выйти, (S)-Старт, (Enter)-Продолжить, (Space)-Настройки");
+                Console.WriteLine("(Escape)-Выйти, (S)-Старт, (Enter)-Продолжить, (Space)-Настройки");
                 while (state == States.Main)
                 {
-                    if (Input.GetKey() == ConsoleKey.Escape)
+                    key = Input.GetKey();
+                    if (key == ConsoleKey.Escape)
                     {
-                        GameManager.Save();
+                        //GameManager.Save();
                         return;
                     }
-                    if (Input.GetKey() == ConsoleKey.Enter)
+                    if (key == ConsoleKey.Enter)
                     {
-                        StartMenu(new View.ConsolePresenter(), GameManager.Load());
-                        //Console.Clear();
-                        //Console.ForegroundColor = ConsoleColor.Red;
-                        //Console.WriteLine("(S)-Стоп");
-                        //Console.ForegroundColor = ConsoleColor.Gray;
-                        //GameManager.Start(new View.ConsolePresenter(), GameManager.Load());
-                        //Console.CursorLeft = 0;
-                        //Console.CursorTop = 0;
-                        //Console.WriteLine("(Escape)-Сохранить и выйти, (S)-Старт, (Enter)-Продолжить, (Space)-Настройки");
-
+                        state = States.GamesVisor;
+                        break;
                     }
-                    if (Input.GetKey() == ConsoleKey.Spacebar)
-                        state = States.Settings;
-                    if (Input.GetKey() == ConsoleKey.S)
+                    if (key == ConsoleKey.Spacebar)
                     {
-                        StartMenu(new View.ConsolePresenter());
-                        //Console.Clear();
-                        //Console.ForegroundColor = ConsoleColor.Red;
-                        //Console.WriteLine("(S)-Стоп");
-                        //Console.ForegroundColor = ConsoleColor.Gray;
-                        //GameManager.Start(new View.ConsolePresenter());
-                        //Console.CursorLeft = 0;
-                        //Console.CursorTop = 0;
-                        //Console.WriteLine("(Escape)-Сохранить и выйти, (S)-Старт, (Enter)-Продолжить, (Space)-Настройки");
+                        state = States.Settings;
+                        break;
+                    }
+                    if (key == ConsoleKey.S)
+                    {
+                        settings.Load();
+                        CurrentGame = Chanell.StartNewGame(CurrentGame, settings);
+                        StartMenu();
                     }
                 }
 
@@ -115,42 +95,137 @@ namespace LifeTest
                 {
                     Console.Clear();
                     Console.WriteLine("Настройки");
-                    Console.WriteLine("(1)-Размер поля, (2)- Макс.соседних клеток, (Space)-Назад");
-                    if (Input.GetKey() == ConsoleKey.Spacebar)
+                    Console.WriteLine("(1)-Размер поля, (2)- Макс.соседних клеток,(3)- Режим,(4)- Ранд.кол , (Space)-Назад");
+                    key = Input.GetKey();
+                    if (key == ConsoleKey.Spacebar)
+                    {
                         state = States.Main;
-                    if (Input.GetKey() == ConsoleKey.D1)
+                        settings.Save();
+                        break;
+                    }
+                    if (key == ConsoleKey.D1)
                     {
                         lock (Input.ob)
                         {
                             Console.WriteLine("введите размер поля");
                             int x = 0;
                             int y = 0;
-                            int.TryParse(Console.ReadLine(), out x);
-                            int.TryParse(Console.ReadLine(), out y);
-                            GameManager.Settings.Size = new KeyValuePair<int, int>(x, y);
+
+
+                            if (int.TryParse(Console.ReadLine(), out x) && int.TryParse(Console.ReadLine(), out y))
+                                settings.Size = new Pair<int, int>(x, y);
+                            else
+                                x = 10; y = 10;
                             continue;
                         }
                     }
-                    if (Input.GetKey() == ConsoleKey.D2)
+                    if (key == ConsoleKey.D2)
                     {
                         lock (Input.ob)
                         {
                             Console.WriteLine("введите число");
-                            int max = int.Parse(Console.ReadLine());
-                            GameManager.Settings.MaxCloseCells = max;
+                            int max = 0;
+
+                            if (int.TryParse(Console.ReadLine(), out max))
+                                settings.MaxCloseCells = max;
+                            else
+                                settings.MaxCloseCells = 2;
                         }
                     }
+                    if (key == ConsoleKey.D3)
+                    {
+                        Console.WriteLine("1 - OnlyGrass, 2 - OnlyGrass_2, 3 - MixedGrass, 4 - WithAnimal");
+                        lock (Input.ob)
+                        {
+                            Console.WriteLine("введите число");
+                            int mode = 0;
+
+                            if (int.TryParse(Console.ReadLine(), out mode))
+                                settings.GameMode = (GameSettings.GameModes)mode;
+                            else
+                                settings.GameMode = GameSettings.GameModes.OnlyGrass;
+                        }
+                    }
+                    if (key == ConsoleKey.D4)
+                    {
+                        settings.SetRandomStartPreset();
+                        Console.WriteLine("ок!!!!!");
+                        Thread.Sleep(250);
+                    }
                     Console.Clear();
+                }
+                while (state == States.GamesVisor)
+                {
+                    Console.Clear();
+                    Console.WriteLine("space - back, enter - выбрать игру");
+                    Console.WriteLine("Все игры на сервере:");
+                    foreach (var item in Chanell.GetAllGames())
+                    {
+                        Console.WriteLine("Id {0}\nSize{3} на {4}\nGeneration {1}\ncount GameObjects {2}\n", item.Id,
+                            item.CurrentField.Generation, item.CurrentField.GameObjects.Count, item.Settings.Size.Key, item.Settings.Size.Value);
+                    }
+                    key = Input.GetKey();
+                    if (key == ConsoleKey.Spacebar)
+                    {
+                        state = States.Main;
+                        break;
+                    }
+                    Console.WriteLine("Выберете id игры");
+                    int id = -1;
+
+                    // lock (Input.ob)
+                    {
+                        if (int.TryParse(Console.ReadLine(), out id))
+                        {
+                            CurrentGame = id;
+                        }
+                        else continue;
+                    }
+
+                    Console.WriteLine("Enter - start, space - delete");
+                    key = Input.GetKey();
+                    if (key == ConsoleKey.Spacebar)
+                    {
+                        Chanell.DeleteGame(CurrentGame);
+                        continue;
+                    }
+                    if (key == ConsoleKey.Enter)
+                    {
+                        Chanell.ContinueGame(CurrentGame);
+                        StartMenu();
+
+                    }
+
                 }
             }
         }
 
 
-
         static void Main(string[] args)
         {
-            Menu();
+            try
+            {
+                //Uri uri = new Uri("http://localhost:4000/LifeService");
 
+                //BasicHttpBinding binding = new BasicHttpBinding("BasicHttpBinding_LifeService");
+
+
+                //EndpointAddress endpoint = new EndpointAddress(uri);
+
+                //ChannelFactory<IService> factory = new ChannelFactory<IService>(binding, endpoint);
+
+
+                //Chanell = factory.CreateChannel();
+                var cl = new ClientService("BasicHttpBinding_LifeService");
+                Chanell = cl.ChannelFactory.CreateChannel();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                Console.ReadKey();
+            }
+            Menu();
         }
     }
 }
+

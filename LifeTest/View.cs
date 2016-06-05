@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LifeTest
+namespace Core
 {
-    abstract class View
+    public abstract class View
     {
         [System.Serializable]
         public class ConsolePresenter : IPresenter
@@ -19,9 +19,9 @@ namespace LifeTest
                        {
                            while (true)
                            {
-                               if (Program.Input.GetKey() == ConsoleKey.S)
-                               {
-                                   GameManager.Stop();
+                               if (Input.GetKey() == ConsoleKey.S)
+                               {                                  
+                                   Program.Chanell.StopGame(Program.CurrentGame);
                                    break;
                                }
                            }
@@ -33,18 +33,18 @@ namespace LifeTest
             {
                 Console.CursorLeft = 0;
                 Console.CursorTop = 1;
-                for (int i = 0; i < field.XLenght; i++)
+                for (int i = 0; i < field.YLenght; i++)
                 {
-                    for (int j = 0; j < field.YLenght; j++)
+                    for (int j = 0; j < field.XLenght; j++)
                     {
-                        if (field.Cells[i, j])
-                            Console.Write("{0}|", field.Cells[i, j].Icon);
+                        if (field.Cells[i][j] != null)
+                            Console.Write("{0}|", field.Cells[i][j].Icon);
                         else
                             Console.Write(" |");
                     }
                     Console.WriteLine();
                     int g = 0;
-                    for (int k = 0; k < field.YLenght * 2; k++)
+                    for (int k = 0; k < field.XLenght * 2; k++)
                     {
                         if (g != 1)
                             Console.Write("-");
@@ -57,15 +57,7 @@ namespace LifeTest
                     }
                     Console.WriteLine();
                 }
-                Console.WriteLine("Поколение {0}, Травы {1}", field.Generation, field.GameObjects.Count);
-            }
-        }
-
-        public class WinPresenter : IPresenter
-        {
-            public void Present(Field field)
-            {
-                throw new NotImplementedException();
+                Console.WriteLine("Поколение {0}, Обьектов {1}", field.Generation, field.GameObjects.Count);
             }
         }
     }
