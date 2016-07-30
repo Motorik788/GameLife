@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using Core.Service;
 using Core;
 using System.ServiceModel;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
+using System.Net;
 
 namespace LifeHost
 {
@@ -13,10 +16,13 @@ namespace LifeHost
     {
         static void Main(string[] args)
         {
+            //Console.WriteLine(Dns.Resolve(Dns.GetHostName()).AddressList[0]);
+
+            //Console.ReadKey();
             GameManager.Load();
             ServiceHost host = new ServiceHost(typeof(Service));
             BasicHttpBinding binding = new BasicHttpBinding();
-            Uri adrr = new Uri("http://localhost:4000/LifeService");
+            Uri adrr = new Uri("http://192.168.1.50:4000/LifeService");
             Type contract = typeof(IService);
             host.AddServiceEndpoint(contract, binding, adrr);
             host.Open();

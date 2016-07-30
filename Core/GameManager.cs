@@ -8,6 +8,7 @@ using Core;
 using System.Xml.Serialization;
 
 
+
 namespace Core
 {
     public static class GameManager
@@ -38,6 +39,7 @@ namespace Core
         {
 
             // DataContractJsonSerializer d = new DataContractJsonSerializer(typeof(Field));
+            
             BLL.Services.SaveService<DAL.Save> fg = new BLL.Services.SaveService<DAL.Save>(new DAL.EntityFramework.Transaction.UnitOfWork(new DAL.Model1()));
             XmlSerializer s;
             MemoryStream f_ = new MemoryStream();
